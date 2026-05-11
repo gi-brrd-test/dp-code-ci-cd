@@ -23,11 +23,10 @@ runs:
     - name: Clone automation scripts
       shell: bash
       env:
-        REPO: ${{ inputs.path_automation_deployment }}
         TOKEN: ${{ inputs.token }}
       run: |
         rm -rf /tmp/dp-code-ci-cd
-        git clone --depth 1 "https://x-access-token:${TOKEN}@github.com/${REPO}.git" /tmp/dp-code-ci-cd
+        git clone --depth 1 "https://x-access-token:${TOKEN}@github.com/gi-brrd-test/dp-code-ci-cd.git" /tmp/dp-code-ci-cd
 
     - name: Configure git
       shell: bash
