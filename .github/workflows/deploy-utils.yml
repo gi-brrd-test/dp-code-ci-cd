@@ -25,7 +25,7 @@ jobs:
     environment: dev
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-deploy
+      - uses: gi-brrd-test/dp-code-ci-cd/.github/actions/setup-deploy@main
         with:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
@@ -62,7 +62,7 @@ jobs:
     environment: qa
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-deploy
+      - uses: gi-brrd-test/dp-code-ci-cd/.github/actions/setup-deploy@main
         with:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
@@ -98,7 +98,7 @@ jobs:
     environment: prod-node1
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-deploy
+      - uses: gi-brrd-test/dp-code-ci-cd/.github/actions/setup-deploy@main
         with:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
@@ -133,7 +133,7 @@ jobs:
     environment: prod-node2
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-deploy
+      - uses: gi-brrd-test/dp-code-ci-cd/.github/actions/setup-deploy@main
         with:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}

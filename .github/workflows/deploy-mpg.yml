@@ -36,7 +36,7 @@ jobs:
       GRUPO_FUNCIONAL: ${{ github.event.repository.name }}
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-deploy
+      - uses: gi-brrd-test/dp-code-ci-cd/.github/actions/setup-deploy@main
         with:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
@@ -84,7 +84,7 @@ jobs:
       GRUPO_FUNCIONAL: ${{ github.event.repository.name }}
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-deploy
+      - uses: gi-brrd-test/dp-code-ci-cd/.github/actions/setup-deploy@main
         with:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
@@ -132,7 +132,7 @@ jobs:
       GRUPO_FUNCIONAL: ${{ github.event.repository.name }}
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-deploy
+      - uses: gi-brrd-test/dp-code-ci-cd/.github/actions/setup-deploy@main
         with:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
@@ -180,7 +180,7 @@ jobs:
       GRUPO_FUNCIONAL: ${{ github.event.repository.name }}
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-deploy
+      - uses: gi-brrd-test/dp-code-ci-cd/.github/actions/setup-deploy@main
         with:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
@@ -226,7 +226,7 @@ jobs:
       GRUPO_FUNCIONAL: ${{ github.event.repository.name }}
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-deploy
+      - uses: gi-brrd-test/dp-code-ci-cd/.github/actions/setup-deploy@main
         with:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
