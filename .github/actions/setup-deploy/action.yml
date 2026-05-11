@@ -14,14 +14,19 @@ inputs:
   git_tag:
     required: false
     default: ''
+  token:
+    required: true
+
 runs:
   using: composite
   steps:
     - name: Clone automation scripts
       shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
       run: |
         rm -rf /tmp/dp-code-ci-cd
-        git clone --depth 1 "https://github.com/gi-brrd-test/dp-code-ci-cd.git" /tmp/dp-code-ci-cd
+        gh repo clone gi-brrd-test/dp-code-ci-cd /tmp/dp-code-ci-cd -- --depth 1
 
     - name: Configure git
       shell: bash

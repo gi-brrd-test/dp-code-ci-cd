@@ -48,6 +48,7 @@ jobs:
           path_automation_deployment: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
           git_user_email: ${{ secrets.GIT_USER_EMAIL }}
           git_user_name: ${{ secrets.GIT_USER_NAME }}
+          token: ${{ secrets.ORG_TOKEN }}
           repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
       - name: Deploy
         env:
@@ -97,6 +98,7 @@ jobs:
           path_automation_deployment: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
           git_user_email: ${{ secrets.GIT_USER_EMAIL }}
           git_user_name: ${{ secrets.GIT_USER_NAME }}
+          token: ${{ secrets.ORG_TOKEN }}
           repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
       - name: Deploy
         env:
@@ -143,6 +145,7 @@ jobs:
           path_automation_deployment: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
           git_user_email: ${{ secrets.GIT_USER_EMAIL }}
           git_user_name: ${{ secrets.GIT_USER_NAME }}
+          token: ${{ secrets.ORG_TOKEN }}
           repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
       - name: Deploy
         env:
@@ -189,6 +192,7 @@ jobs:
           path_automation_deployment: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
           git_user_email: ${{ secrets.GIT_USER_EMAIL }}
           git_user_name: ${{ secrets.GIT_USER_NAME }}
+          token: ${{ secrets.ORG_TOKEN }}
           repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
       - name: Deploy
         env:
@@ -232,6 +236,7 @@ jobs:
           path_automation_deployment: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
           git_user_email: ${{ secrets.GIT_USER_EMAIL }}
           git_user_name: ${{ secrets.GIT_USER_NAME }}
+          token: ${{ secrets.ORG_TOKEN }}
           git_tag: ${{ inputs.rollback_tag }}
       - name: Rollback
         env:
