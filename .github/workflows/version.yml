@@ -7,7 +7,7 @@ on:
 
 jobs:
   version:
-    runs-on: [self-hosted, aks-runner]
+    runs-on: [self-hosted, dp-dev]
     outputs:
       tag: ${{ steps.semver.outputs.new_tag }}
     steps:

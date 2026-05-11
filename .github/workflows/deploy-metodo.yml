@@ -28,7 +28,7 @@ env:
 
 jobs:
   build:
-    runs-on: [self-hosted, aks-runner]
+    runs-on: [self-hosted, dp-dev]
     if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v4
@@ -36,7 +36,7 @@ jobs:
         run: echo "Aqui va el build"
 
   deploy-dev:
-    runs-on: [self-hosted, aks-runner]
+    runs-on: [self-hosted, dp-dev]
     needs: [build]
     if: github.event_name == 'push'
     environment: dev

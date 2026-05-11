@@ -13,14 +13,14 @@ env:
 
 jobs:
   build:
-    runs-on: [self-hosted, aks-runner]
+    runs-on: [self-hosted, dp-dev]
     steps:
       - uses: actions/checkout@v4
       - name: Build
         run: echo "Aqui va el build"
 
   deploy-dev:
-    runs-on: [self-hosted, aks-runner]
+    runs-on: [self-hosted, dp-dev]
     needs: [build]
     environment: dev
     steps:
@@ -57,7 +57,7 @@ jobs:
           done
 
   deploy-qa:
-    runs-on: [self-hosted, aks-runner]
+    runs-on: [self-hosted, dp-dev]
     needs: [deploy-dev]
     environment: qa
     steps:
@@ -93,7 +93,7 @@ jobs:
           done
 
   deploy-prod-node1:
-    runs-on: [self-hosted, aks-runner]
+    runs-on: [self-hosted, dp-dev]
     needs: [deploy-qa]
     environment: prod-node1
     steps:
@@ -128,7 +128,7 @@ jobs:
           done
 
   deploy-prod-node2:
-    runs-on: [self-hosted, aks-runner]
+    runs-on: [self-hosted, dp-dev]
     needs: [deploy-qa]
     environment: prod-node2
     steps:

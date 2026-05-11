@@ -12,14 +12,14 @@ env:
 
 jobs:
   build:
-    runs-on: [self-hosted, aks-runner]
+    runs-on: [self-hosted, dp-dev]
     steps:
       - uses: actions/checkout@v4
       - name: Build
         run: echo "Aqui va el build"
 
   deploy-dev:
-    runs-on: [self-hosted, aks-runner]
+    runs-on: [self-hosted, dp-dev]
     needs: [build]
     environment: dev
     env:
