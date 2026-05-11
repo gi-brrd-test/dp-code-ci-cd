@@ -14,6 +14,9 @@ inputs:
   git_tag:
     required: false
     default: ''
+  token:
+    required: false
+    default: ${{ github.token }}
 
 runs:
   using: composite
@@ -23,8 +26,8 @@ runs:
       with:
         repository: ${{ inputs.path_automation_deployment }}
         ref: main
-        path: /tmp/${{ inputs.path_automation_deployment && 'dp-code-ci-cd' || 'dp-code-ci-cd' }}
-        token: ${{ github.token }}
+        path: /tmp/dp-code-ci-cd
+        token: ${{ inputs.token }}
 
     - name: Configure git
       shell: bash
