@@ -23,6 +23,7 @@ env:
   PATH_CONFIG: deploy
   PATH_FILES: uploadfile
   VERSION_FILE: version.json
+  PATH_AUTOMATION_DEPLOYMENT: gi-brrd-test/dp-code-ci-cd
 
 jobs:
   build:

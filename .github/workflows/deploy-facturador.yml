@@ -9,6 +9,7 @@ on:
 env:
   VERSION_FILE: version.json
   FACTURADOR_DIR: facturadores
+  PATH_AUTOMATION_DEPLOYMENT: gi-brrd-test/dp-code-ci-cd
 
 jobs:
   build:
