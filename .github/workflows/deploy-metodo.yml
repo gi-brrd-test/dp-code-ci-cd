@@ -43,6 +43,12 @@ jobs:
       ENVIRONMENT_: dev
     steps:
       - uses: actions/checkout@v4
+      - name: Debug token
+        env:
+          TOKEN: ${{ secrets.ORG_TOKEN }}
+        shell: bash
+        run: |
+          if [ -z "$TOKEN" ]; then echo "ORG_TOKEN is EMPTY"; else echo "ORG_TOKEN is SET (len=${#TOKEN})"; fi
       - uses: gi-brrd-test/dp-code-ci-cd/.github/actions/setup-deploy@main
         with:
           path_automation_deployment: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
