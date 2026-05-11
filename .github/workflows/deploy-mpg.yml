@@ -39,17 +39,17 @@ jobs:
       - uses: gi-brrd-test/dp-code-ci-cd/.github/actions/setup-deploy@main
         with:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          path_automation_deployment: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
           git_user_email: ${{ secrets.GIT_USER_EMAIL }}
           git_user_name: ${{ secrets.GIT_USER_NAME }}
           repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
       - name: Deploy
         env:
-          DATAPOWER_USER: ${{ secrets.DATAPOWER_USER }}
+          DATAPOWER_USER: ${{ vars.DATAPOWER_USER }}
           DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
           DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
-          NODE_URL: ${{ secrets.NODE_URL }}
-          PATH_AUTOMATION_DEPLOYMENT: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          NODE_URL: ${{ vars.NODE_URL }}
+          PATH_AUTOMATION_DEPLOYMENT: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
         run: |
           echo "Deploying... $ENVIRONMENT_"
           if [ -f "$VERSION_FILE" ]; then
@@ -87,17 +87,17 @@ jobs:
       - uses: gi-brrd-test/dp-code-ci-cd/.github/actions/setup-deploy@main
         with:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          path_automation_deployment: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
           git_user_email: ${{ secrets.GIT_USER_EMAIL }}
           git_user_name: ${{ secrets.GIT_USER_NAME }}
           repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
       - name: Deploy
         env:
-          DATAPOWER_USER: ${{ secrets.DATAPOWER_USER }}
+          DATAPOWER_USER: ${{ vars.DATAPOWER_USER }}
           DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
           DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
-          NODE_URL: ${{ secrets.NODE_URL }}
-          PATH_AUTOMATION_DEPLOYMENT: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          NODE_URL: ${{ vars.NODE_URL }}
+          PATH_AUTOMATION_DEPLOYMENT: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
         run: |
           echo "$ENVIRONMENT_"
           if [ -f "$VERSION_FILE" ]; then
@@ -135,17 +135,17 @@ jobs:
       - uses: gi-brrd-test/dp-code-ci-cd/.github/actions/setup-deploy@main
         with:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          path_automation_deployment: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
           git_user_email: ${{ secrets.GIT_USER_EMAIL }}
           git_user_name: ${{ secrets.GIT_USER_NAME }}
           repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
       - name: Deploy
         env:
-          DATAPOWER_USER: ${{ secrets.DATAPOWER_USER }}
+          DATAPOWER_USER: ${{ vars.DATAPOWER_USER }}
           DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
           DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
-          NODE_URL: ${{ secrets.NODE_URL }}
-          PATH_AUTOMATION_DEPLOYMENT: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          NODE_URL: ${{ vars.NODE_URL }}
+          PATH_AUTOMATION_DEPLOYMENT: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
         run: |
           echo "$ENVIRONMENT_"
           if [ -f "$VERSION_FILE" ]; then
@@ -183,17 +183,17 @@ jobs:
       - uses: gi-brrd-test/dp-code-ci-cd/.github/actions/setup-deploy@main
         with:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          path_automation_deployment: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
           git_user_email: ${{ secrets.GIT_USER_EMAIL }}
           git_user_name: ${{ secrets.GIT_USER_NAME }}
           repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
       - name: Deploy
         env:
-          DATAPOWER_USER: ${{ secrets.DATAPOWER_USER }}
+          DATAPOWER_USER: ${{ vars.DATAPOWER_USER }}
           DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
           DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
-          NODE_URL: ${{ secrets.NODE_URL }}
-          PATH_AUTOMATION_DEPLOYMENT: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          NODE_URL: ${{ vars.NODE_URL }}
+          PATH_AUTOMATION_DEPLOYMENT: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
         run: |
           echo "$ENVIRONMENT_"
           if [ -f "$VERSION_FILE" ]; then
@@ -229,17 +229,17 @@ jobs:
       - uses: gi-brrd-test/dp-code-ci-cd/.github/actions/setup-deploy@main
         with:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          path_automation_deployment: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
           git_user_email: ${{ secrets.GIT_USER_EMAIL }}
           git_user_name: ${{ secrets.GIT_USER_NAME }}
           git_tag: ${{ inputs.rollback_tag }}
       - name: Rollback
         env:
-          DATAPOWER_USER: ${{ secrets.DATAPOWER_USER }}
+          DATAPOWER_USER: ${{ vars.DATAPOWER_USER }}
           DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
           DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
-          NODE_URL: ${{ secrets.NODE_URL }}
-          PATH_AUTOMATION_DEPLOYMENT: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          NODE_URL: ${{ vars.NODE_URL }}
+          PATH_AUTOMATION_DEPLOYMENT: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
         run: |
           echo "Rollback to tag ${{ inputs.rollback_tag }}"
           if [ -f "$VERSION_FILE" ]; then

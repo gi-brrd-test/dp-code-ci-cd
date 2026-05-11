@@ -28,18 +28,18 @@ jobs:
       - uses: gi-brrd-test/dp-code-ci-cd/.github/actions/setup-deploy@main
         with:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          path_automation_deployment: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
           git_user_email: ${{ secrets.GIT_USER_EMAIL }}
           git_user_name: ${{ secrets.GIT_USER_NAME }}
           repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
       - name: Deploy
         env:
-          DATAPOWER_USER: ${{ secrets.DATAPOWER_USER }}
+          DATAPOWER_USER: ${{ vars.DATAPOWER_USER }}
           DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
           DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
-          NODE_URL: ${{ secrets.NODE_URL }}
+          NODE_URL: ${{ vars.NODE_URL }}
           DOMAIN: ${{ vars.DOMAIN }}
-          PATH_AUTOMATION_DEPLOYMENT: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          PATH_AUTOMATION_DEPLOYMENT: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
         run: |
           if [ -f "$VERSION_FILE" ]; then cat $VERSION_FILE; else echo "version.json not found!"; exit 1; fi
           SCRIPT_PATH="/tmp/$(basename "$PATH_AUTOMATION_DEPLOYMENT")/scripts/deploy_files_utils.sh"
@@ -65,18 +65,18 @@ jobs:
       - uses: gi-brrd-test/dp-code-ci-cd/.github/actions/setup-deploy@main
         with:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          path_automation_deployment: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
           git_user_email: ${{ secrets.GIT_USER_EMAIL }}
           git_user_name: ${{ secrets.GIT_USER_NAME }}
           repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
       - name: Deploy
         env:
-          DATAPOWER_USER: ${{ secrets.DATAPOWER_USER }}
+          DATAPOWER_USER: ${{ vars.DATAPOWER_USER }}
           DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
           DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
-          NODE_URL: ${{ secrets.NODE_URL }}
+          NODE_URL: ${{ vars.NODE_URL }}
           DOMAIN: ${{ vars.DOMAIN }}
-          PATH_AUTOMATION_DEPLOYMENT: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          PATH_AUTOMATION_DEPLOYMENT: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
         run: |
           if [ -f "$VERSION_FILE" ]; then cat $VERSION_FILE; else echo "version.json not found!"; exit 1; fi
           SCRIPT_PATH="/tmp/$(basename "$PATH_AUTOMATION_DEPLOYMENT")/scripts/deploy_files_utils.sh"
@@ -101,18 +101,18 @@ jobs:
       - uses: gi-brrd-test/dp-code-ci-cd/.github/actions/setup-deploy@main
         with:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          path_automation_deployment: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
           git_user_email: ${{ secrets.GIT_USER_EMAIL }}
           git_user_name: ${{ secrets.GIT_USER_NAME }}
           repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
       - name: Deploy
         env:
-          DATAPOWER_USER: ${{ secrets.DATAPOWER_USER }}
+          DATAPOWER_USER: ${{ vars.DATAPOWER_USER }}
           DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
           DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
-          NODE_URL: ${{ secrets.NODE_URL }}
+          NODE_URL: ${{ vars.NODE_URL }}
           DOMAIN: ${{ vars.DOMAIN }}
-          PATH_AUTOMATION_DEPLOYMENT: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          PATH_AUTOMATION_DEPLOYMENT: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
         run: |
           if [ -f "$VERSION_FILE" ]; then cat $VERSION_FILE; else echo "version.json not found!"; exit 1; fi
           SCRIPT_PATH="/tmp/$(basename "$PATH_AUTOMATION_DEPLOYMENT")/scripts/deploy_files_utils.sh"
@@ -136,18 +136,18 @@ jobs:
       - uses: gi-brrd-test/dp-code-ci-cd/.github/actions/setup-deploy@main
         with:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          path_automation_deployment: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
           git_user_email: ${{ secrets.GIT_USER_EMAIL }}
           git_user_name: ${{ secrets.GIT_USER_NAME }}
           repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
       - name: Deploy
         env:
-          DATAPOWER_USER: ${{ secrets.DATAPOWER_USER }}
+          DATAPOWER_USER: ${{ vars.DATAPOWER_USER }}
           DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
           DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
-          NODE_URL: ${{ secrets.NODE_URL }}
+          NODE_URL: ${{ vars.NODE_URL }}
           DOMAIN: ${{ vars.DOMAIN }}
-          PATH_AUTOMATION_DEPLOYMENT: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          PATH_AUTOMATION_DEPLOYMENT: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
         run: |
           if [ -f "$VERSION_FILE" ]; then cat $VERSION_FILE; else echo "version.json not found!"; exit 1; fi
           SCRIPT_PATH="/tmp/$(basename "$PATH_AUTOMATION_DEPLOYMENT")/scripts/deploy_files_utils.sh"
