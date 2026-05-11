@@ -29,12 +29,6 @@ runs:
         mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        rm -f /tmp/ssh-agent/agent.sock || true
-        mkdir -p /tmp/ssh-agent
-        SSH_AGENT_SOCK=/tmp/ssh-agent/agent.sock
-        ssh-agent -a "$SSH_AGENT_SOCK" > /dev/null
-        export SSH_AUTH_SOCK="$SSH_AGENT_SOCK"
-        ssh-add ~/.ssh/id_rsa
         ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
         ssh-keyscan gitlab.com >> ~/.ssh/known_hosts 2>/dev/null
         rm -rf /tmp/$(basename "$PATH_AUTOMATION_DEPLOYMENT") || true
