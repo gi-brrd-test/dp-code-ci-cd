@@ -1,0 +1,163 @@
+name: Deploy Utils
+
+on:
+  push:
+    branches:
+      - main
+      - 'hotfix/**'
+
+env:
+  PATH_FILES: uploadfile
+  VERSION_FILE: version.json
+  BASE_DIR: local
+
+jobs:
+  build:
+    runs-on: [self-hosted, aks-runner]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: echo "Aqui va el build"
+
+  deploy-dev:
+    runs-on: [self-hosted, aks-runner]
+    needs: [build]
+    environment: dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-deploy
+        with:
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          git_user_email: ${{ secrets.GIT_USER_EMAIL }}
+          git_user_name: ${{ secrets.GIT_USER_NAME }}
+          repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
+      - name: Deploy
+        env:
+          DATAPOWER_USER: ${{ secrets.DATAPOWER_USER }}
+          DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
+          DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
+          NODE_URL: ${{ secrets.NODE_URL }}
+          DOMAIN: ${{ vars.DOMAIN }}
+          PATH_AUTOMATION_DEPLOYMENT: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+        run: |
+          if [ -f "$VERSION_FILE" ]; then cat $VERSION_FILE; else echo "version.json not found!"; exit 1; fi
+          SCRIPT_PATH="/tmp/$(basename "$PATH_AUTOMATION_DEPLOYMENT")/scripts/deploy_files_utils.sh"
+          find "$BASE_DIR" -type f -name "*.js" -exec dirname {} \; | sort -u | while read -r carpeta; do
+            echo "Procesando carpeta: $carpeta"
+            json=$(bash "$SCRIPT_PATH" "$carpeta" "$DOMAIN")
+            echo "JSON generado: $json"
+            response=$(curl --insecure -X POST -d "$json" \
+              -H "Content-Type:application/json" \
+              -H "_user:${DATAPOWER_USER}" \
+              -H "_pass:${DATAPOWER_PASS}" \
+              -H "_ip_dp:${DATAPOWER_URL}" \
+              "$NODE_URL/$PATH_FILES")
+            echo "Respuesta: $response"
+          done
+
+  deploy-qa:
+    runs-on: [self-hosted, aks-runner]
+    needs: [deploy-dev]
+    environment: qa
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-deploy
+        with:
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          git_user_email: ${{ secrets.GIT_USER_EMAIL }}
+          git_user_name: ${{ secrets.GIT_USER_NAME }}
+          repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
+      - name: Deploy
+        env:
+          DATAPOWER_USER: ${{ secrets.DATAPOWER_USER }}
+          DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
+          DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
+          NODE_URL: ${{ secrets.NODE_URL }}
+          DOMAIN: ${{ vars.DOMAIN }}
+          PATH_AUTOMATION_DEPLOYMENT: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+        run: |
+          if [ -f "$VERSION_FILE" ]; then cat $VERSION_FILE; else echo "version.json not found!"; exit 1; fi
+          SCRIPT_PATH="/tmp/$(basename "$PATH_AUTOMATION_DEPLOYMENT")/scripts/deploy_files_utils.sh"
+          find "$BASE_DIR" -type f -name "*.js" -exec dirname {} \; | sort -u | while read -r carpeta; do
+            echo "Procesando carpeta: $carpeta"
+            json=$(bash "$SCRIPT_PATH" "$carpeta" "$DOMAIN")
+            response=$(curl --insecure -X POST -d "$json" \
+              -H "Content-Type:application/json" \
+              -H "_user:${DATAPOWER_USER}" \
+              -H "_pass:${DATAPOWER_PASS}" \
+              -H "_ip_dp:${DATAPOWER_URL}" \
+              "$NODE_URL/$PATH_FILES")
+            echo "$response"
+          done
+
+  deploy-prod-node1:
+    runs-on: [self-hosted, aks-runner]
+    needs: [deploy-qa]
+    environment: prod-node1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-deploy
+        with:
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          git_user_email: ${{ secrets.GIT_USER_EMAIL }}
+          git_user_name: ${{ secrets.GIT_USER_NAME }}
+          repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
+      - name: Deploy
+        env:
+          DATAPOWER_USER: ${{ secrets.DATAPOWER_USER }}
+          DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
+          DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
+          NODE_URL: ${{ secrets.NODE_URL }}
+          DOMAIN: ${{ vars.DOMAIN }}
+          PATH_AUTOMATION_DEPLOYMENT: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+        run: |
+          if [ -f "$VERSION_FILE" ]; then cat $VERSION_FILE; else echo "version.json not found!"; exit 1; fi
+          SCRIPT_PATH="/tmp/$(basename "$PATH_AUTOMATION_DEPLOYMENT")/scripts/deploy_files_utils.sh"
+          find "$BASE_DIR" -type f -name "*.js" -exec dirname {} \; | sort -u | while read -r carpeta; do
+            json=$(bash "$SCRIPT_PATH" "$carpeta" "$DOMAIN")
+            response=$(curl --insecure -X POST -d "$json" \
+              -H "Content-Type:application/json" \
+              -H "_user:${DATAPOWER_USER}" \
+              -H "_pass:${DATAPOWER_PASS}" \
+              -H "_ip_dp:${DATAPOWER_URL}" \
+              "$NODE_URL/$PATH_FILES")
+            echo "$response"
+          done
+
+  deploy-prod-node2:
+    runs-on: [self-hosted, aks-runner]
+    needs: [deploy-qa]
+    environment: prod-node2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-deploy
+        with:
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          path_automation_deployment: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+          git_user_email: ${{ secrets.GIT_USER_EMAIL }}
+          git_user_name: ${{ secrets.GIT_USER_NAME }}
+          repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
+      - name: Deploy
+        env:
+          DATAPOWER_USER: ${{ secrets.DATAPOWER_USER }}
+          DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
+          DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
+          NODE_URL: ${{ secrets.NODE_URL }}
+          DOMAIN: ${{ vars.DOMAIN }}
+          PATH_AUTOMATION_DEPLOYMENT: ${{ secrets.PATH_AUTOMATION_DEPLOYMENT }}
+        run: |
+          if [ -f "$VERSION_FILE" ]; then cat $VERSION_FILE; else echo "version.json not found!"; exit 1; fi
+          SCRIPT_PATH="/tmp/$(basename "$PATH_AUTOMATION_DEPLOYMENT")/scripts/deploy_files_utils.sh"
+          find "$BASE_DIR" -type f -name "*.js" -exec dirname {} \; | sort -u | while read -r carpeta; do
+            json=$(bash "$SCRIPT_PATH" "$carpeta" "$DOMAIN")
+            response=$(curl --insecure -X POST -d "$json" \
+              -H "Content-Type:application/json" \
+              -H "_user:${DATAPOWER_USER}" \
+              -H "_pass:${DATAPOWER_PASS}" \
+              -H "_ip_dp:${DATAPOWER_URL}" \
+              "$NODE_URL/$PATH_FILES")
+            echo "$response"
+          done

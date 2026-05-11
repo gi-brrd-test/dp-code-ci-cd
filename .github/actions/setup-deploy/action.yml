@@ -1,0 +1,60 @@
+name: Setup Deploy
+description: Install deps, setup SSH, clone automation repo, configure git
+
+inputs:
+  ssh_private_key:
+    required: true
+  path_automation_deployment:
+    required: true
+  git_user_email:
+    required: true
+  git_user_name:
+    required: true
+  repo_branch_name:
+    required: false
+    default: ''
+  git_tag:
+    required: false
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - name: Install dependencies
+      shell: bash
+      run: apk update && apk add --no-cache curl git bash openssh-client jq
+
+    - name: Setup SSH
+      shell: bash
+      env:
+        SSH_PRIVATE_KEY: ${{ inputs.ssh_private_key }}
+        PATH_AUTOMATION_DEPLOYMENT: ${{ inputs.path_automation_deployment }}
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        eval $(ssh-agent -s)
+        ssh-add ~/.ssh/id_rsa
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+        ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+        rm -rf /tmp/$(basename "$PATH_AUTOMATION_DEPLOYMENT") || true
+        git clone -b "main" git@github.com:${PATH_AUTOMATION_DEPLOYMENT}.git /tmp/$(basename "$PATH_AUTOMATION_DEPLOYMENT")
+        git config --global --add safe.directory '*'
+        chmod 777 /tmp/$(basename "$PATH_AUTOMATION_DEPLOYMENT")/ -R
+
+    - name: Configure git
+      shell: bash
+      env:
+        GIT_USER_EMAIL: ${{ inputs.git_user_email }}
+        GIT_USER_NAME: ${{ inputs.git_user_name }}
+        REPO_BRANCH_NAME: ${{ inputs.repo_branch_name }}
+        GIT_TAG: ${{ inputs.git_tag }}
+      run: |
+        git config --global user.email "$GIT_USER_EMAIL"
+        git config --global user.name "$GIT_USER_NAME"
+        if [ -n "$GIT_TAG" ]; then
+          git fetch --tags
+          git checkout "$GIT_TAG"
+        elif [ -n "$REPO_BRANCH_NAME" ]; then
+          git checkout "$REPO_BRANCH_NAME" || true
+        fi
