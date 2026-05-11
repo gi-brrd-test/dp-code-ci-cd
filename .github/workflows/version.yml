@@ -1,9 +1,5 @@
 name: Version
 
-# NOTE: This workflow used a private GitLab registry image (SemVer01) with
-# custom scripts (get-semver.sh / set-semver.sh). Replace the version-bump
-# step with your own semver tooling (e.g. mathieudutour/github-tag-action).
-
 on:
   push:
     branches:
@@ -12,39 +8,27 @@ on:
 jobs:
   version:
     runs-on: [self-hosted, aks-runner]
+    outputs:
+      tag: ${{ steps.semver.outputs.new_tag }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          eval $(ssh-agent -s)
-          ssh-add ~/.ssh/id_rsa
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Bump version and push tag
-        id: tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GROUP_ACCESS_TOKEN: ${{ secrets.GROUP_ACCESS_TOKEN }}
-        run: |
-          # TODO: replace with your semver logic
-          # Original used get-semver.sh / set-semver.sh from SemVer01 image
-          # Example using conventional commits approach:
-          # LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-          # NEW_TAG=$(bump-semver $LATEST_TAG patch)
-          # git tag -a "$NEW_TAG" -m "Tagging version $NEW_TAG"
-          # git push origin "$NEW_TAG"
-          echo "TAG_VERSION=v0.0.0" >> "$GITHUB_OUTPUT"
-          echo "TAG_VERSION=v0.0.0" >> TAG.env
-
-      - name: Upload version artifact
-        uses: actions/upload-artifact@v4
+        id: semver
+        uses: mathieudutour/github-tag-action@v6.2
         with:
-          name: tag-env
-          path: TAG.env
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Convenciones de branch → tipo de bump:
+          # hotfix/** → patch  (v1.0.0 → v1.0.1)
+          # fix/**    → patch
+          # feat/**   → minor  (v1.0.0 → v1.1.0)
+          # major/**  → major  (v1.0.0 → v2.0.0)
+          # Si el MR viene de hotfix/ → patch automático
+          default_bump: patch
+          tag_prefix: v
+
+      - name: Show generated tag
+        run: echo "Tag generado → ${{ steps.semver.outputs.new_tag }}"
