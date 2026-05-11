@@ -11,6 +11,15 @@ on:
         description: 'Tag para rollback (dejar vacío para deploy normal)'
         required: false
         default: ''
+  workflow_call:
+    inputs:
+      rollback_tag:
+        description: 'Tag para rollback'
+        type: string
+        required: false
+        default: ''
+    secrets:
+      inherit: true
 
 env:
   PATH_CONFIG: deploy
