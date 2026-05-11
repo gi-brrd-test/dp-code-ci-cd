@@ -1,0 +1,11 @@
+cleanup:
+  stage: cleanup
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^main$/'
+  script:
+    - echo "Cleaning up..."
+    - rm -rf /builds || true  # Remove build artifacts, ignore errors if the directory doesn't exist
+    - rm -rf /build || true  # Remove build artifacts, ignore errors if the directory doesn't exist
+    - rm -rf /test_results || true 
+    - rm -rf /tmp/$(basename ${PATH_AUTOMATION_DEPLOYMENT}) || true   # Remove test results
+    # Add more cleanup commands as needed

@@ -1,0 +1,118 @@
+.rewrite_variables: &rewrite_variables
+  before_script:
+    - export ENVIRONMENT_="prod-node1"
+    - apk update && apk add --no-cache curl git bash openssh-client jq
+    - mkdir -p ~/.ssh
+    - echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - eval `ssh-agent -s`
+    - ssh-add
+    - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+    #- cat ~/.ssh/id_rsa
+    #- git clone -b "main" git@gitlab.banreservas.com:${PATH_AUTOMATION_DEPLOYMENT}.git /tmp/$(basename ${PATH_AUTOMATION_DEPLOYMENT})
+    - git clone -b "main" git@gitlab.com:${PATH_AUTOMATION_DEPLOYMENT}.git /tmp/$(basename ${PATH_AUTOMATION_DEPLOYMENT})
+    - git config --global --add safe.directory '*'
+    - git remote set-url origin ${PRIVATE_ACCESS_REPO}
+    - git checkout ${REPO_BRANCH_NAME}
+    - git config --global user.email "$GITLAB_USER_EMAIL"
+    - git config --global user.name "$GITLAB_USER_NAME"
+    - chmod 777 /tmp/$(basename ${PATH_AUTOMATION_DEPLOYMENT})/ -R
+
+variables:
+  PATH_CONFIG: "config"
+  PATH_FILES: "uploadfile"
+  VERSION_FILE: "version.json"
+  GRUPO_FUNCIONAL: $CI_PROJECT_TITLE
+
+deploy-prod-node1:
+  stage: deploy-prod-node1
+  environment: 
+    name: prod-node1
+  when: manual
+  only:
+    - main
+    - /^hotfix\//
+  <<: *rewrite_variables
+  script:
+    - echo "Deploying the project... Deploy Servicio"
+    - echo ${ENVIRONMENT_}
+    - |
+        if [ -f "$VERSION_FILE" ]; then 
+            echo "version.json found."
+            cat $VERSION_FILE
+            BANDERA_DEPLOY=$(jq -r 'if has("displayAll") then .displayAll else true end' "$VERSION_FILE")
+            
+        else 
+            echo "version.json not found!"
+            exit 1
+        fi
+    - echo "BANDERA_DEPLOY is set to $BANDERA_DEPLOY"
+    - |
+        if [ "$BANDERA_DEPLOY" = true ]; then
+            json=$(bash /tmp/$(basename ${PATH_AUTOMATION_DEPLOYMENT})/scripts/deploy_service.sh)
+            PATH_NODE="$PATH_CONFIG"
+        else
+            json=$(bash /tmp/$(basename ${PATH_AUTOMATION_DEPLOYMENT})/scripts/deploy_files.sh)
+            PATH_NODE="$PATH_FILES"
+        fi
+    - echo ${json}
+    - response=$(curl --insecure -X POST -d "$json" -H "Content-Type:application/json" -H "_user:${DATAPOWER_USER}" -H "_pass:${DATAPOWER_PASS}" -H "_ip_dp:${DATAPOWER_URL}" "$NODE_URL/$PATH_NODE");
+    - echo "$response";
+  needs:
+    - deploy-qa
+  tags:    
+    - dp-pdn
+
+rollback-prod-node1:
+  stage: deploy-prod-node1
+  environment: 
+    name: prod-node1
+  only:
+    - tags
+  when: manual
+  before_script:
+    - echo "Pipeline executed Rollback for tag $CI_COMMIT_TAG"
+    - apk update && apk add --no-cache curl git bash openssh-client jq
+    - export ENVIRONMENT_="prod-node1"
+    - mkdir -p ~/.ssh
+    - echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - eval `ssh-agent -s`
+    - ssh-add
+    - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+    - rm -rf /tmp/$(basename ${PATH_AUTOMATION_DEPLOYMENT}) || true
+    - git clone -b "main" git@gitlab.com:${PATH_AUTOMATION_DEPLOYMENT}.git /tmp/$(basename ${PATH_AUTOMATION_DEPLOYMENT})
+    - git config --global --add safe.directory '*'
+    - git remote set-url origin ${PRIVATE_ACCESS_REPO}
+    - git fetch --tags
+    - git checkout ${CI_COMMIT_TAG}
+    - git config --global user.email "$GITLAB_USER_EMAIL"
+    - git config --global user.name "$GITLAB_USER_NAME"
+    - chmod 777 /tmp/$(basename ${PATH_AUTOMATION_DEPLOYMENT})/ -R
+  script:
+    - echo "Deploying the project... Deploy Servicio"
+    - echo ${ENVIRONMENT_}
+    - |
+        if [ -f "$VERSION_FILE" ]; then 
+            echo "version.json found."
+            cat $VERSION_FILE
+            BANDERA_DEPLOY=$(jq -r 'if has("displayAll") then .displayAll else true end' "$VERSION_FILE")
+            
+        else 
+            echo "version.json not found!"
+            exit 1
+        fi
+    - echo "BANDERA_DEPLOY is set to $BANDERA_DEPLOY"
+    - |
+        if [ "$BANDERA_DEPLOY" = true ]; then
+            json=$(bash /tmp/$(basename ${PATH_AUTOMATION_DEPLOYMENT})/scripts/deploy_service.sh)
+            PATH_NODE="$PATH_CONFIG"
+        else
+            json=$(bash /tmp/$(basename ${PATH_AUTOMATION_DEPLOYMENT})/scripts/deploy_files.sh)
+            PATH_NODE="$PATH_FILES"
+        fi
+    - echo ${json}
+    - response=$(curl --insecure -X POST -d "$json" -H "Content-Type:application/json" -H "_user:${DATAPOWER_USER}" -H "_pass:${DATAPOWER_PASS}" -H "_ip_dp:${DATAPOWER_URL}" "$NODE_URL/$PATH_NODE");
+    - echo "$response";
+  tags:    
+    - dp-pdn  

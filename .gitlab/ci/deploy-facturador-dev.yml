@@ -1,0 +1,52 @@
+.rewrite_variables: &rewrite_variables
+  before_script:
+    - export ENVIRONMENT_="dev"
+    - apk update && apk add --no-cache curl git bash openssh-client jq
+    - mkdir -p ~/.ssh
+    - echo "${SSH_PRIVATE_KEY}" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - eval `ssh-agent -s`
+    - ssh-add
+    - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+    - rm -rf /tmp/$(basename ${PATH_AUTOMATION_DEPLOYMENT}) || true 
+    #- cat ~/.ssh/id_rsa
+    #- git clone -b "main" git@gitlab.banreservas.com:${PATH_AUTOMATION_DEPLOYMENT}.git /tmp/$(basename ${PATH_AUTOMATION_DEPLOYMENT})
+    - git clone -b "main" git@gitlab.com:${PATH_AUTOMATION_DEPLOYMENT}.git /tmp/$(basename ${PATH_AUTOMATION_DEPLOYMENT})
+    - git config --global --add safe.directory '*'
+    - git remote set-url origin ${PRIVATE_ACCESS_REPO}
+    - git checkout ${REPO_BRANCH_NAME}
+    - git config --global user.email "$GITLAB_USER_EMAIL"
+    - git config --global user.name "$GITLAB_USER_NAME"
+    - chmod 777 /tmp/$(basename ${PATH_AUTOMATION_DEPLOYMENT})/ -R
+
+variables:
+  VERSION_FILE: "version.json"
+  FACTURADOR_DIR: "facturadores"
+
+deploy-dev:
+  stage: deploy-dev
+  environment: 
+    name: dev
+  only:
+    - main
+    - /^hotfix\//
+  <<: *rewrite_variables
+  script:
+    - echo "Deploying the project... Deploy Metodo"
+    - if [ -f "$VERSION_FILE" ]; then echo "version.json found."; cat $VERSION_FILE; else echo "version.json not found!"; exit 1; fi
+    - FACTURADOR=$(jq -r '.facturador' $VERSION_FILE)
+    - if [ -z "$FACTURADOR" ]; then echo "Facturador is empty or undefined!"; exit 1; fi
+    - echo "Using facturador $FACTURADOR"
+    - FACTURADOR_FILE="$FACTURADOR_DIR/$FACTURADOR.json"
+    - echo "Generated facturador file path $FACTURADOR_FILE"
+    - if [ -f "$FACTURADOR_FILE" ]; then echo "Found facturador file $FACTURADOR_FILE"; else echo "Facturador file not found $FACTURADOR_FILE"; exit 1; fi
+    - FACTURADOR_CONTENT=$(cat "$FACTURADOR_FILE")
+    - config=$(echo "$FACTURADOR_CONTENT" | base64 -w 0)
+    - data="{\"config\":\"$config\",\"domain\":\"$DOMAIN\"}"
+    - echo "Payload data $data"
+    - response=$(curl --insecure -X POST -d "$data" -H "Content-Type:application/json" -H "_user:${DATAPOWER_USER}" -H "_pass:${DATAPOWER_PASS}" -H "_ip_dp:${DATAPOWER_URL}" "$NODE_URL/uploadconfig")
+    - echo "Response $response"
+  needs:
+    - build
+  tags:    
+    - aks-runner
