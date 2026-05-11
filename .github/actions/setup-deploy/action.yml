@@ -1,9 +1,7 @@
 name: Setup Deploy
-description: Install deps, setup SSH, clone automation repo, configure git
+description: Clone dp-code-ci-cd scripts and configure git
 
 inputs:
-  ssh_private_key:
-    required: true
   path_automation_deployment:
     required: true
   git_user_email:
@@ -20,22 +18,13 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Setup SSH
-      shell: bash
-      env:
-        SSH_PRIVATE_KEY: ${{ inputs.ssh_private_key }}
-        PATH_AUTOMATION_DEPLOYMENT: ${{ inputs.path_automation_deployment }}
-      run: |
-        mkdir -p ~/.ssh
-        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
-        ssh-keyscan gitlab.com >> ~/.ssh/known_hosts 2>/dev/null
-        rm -rf /tmp/$(basename "$PATH_AUTOMATION_DEPLOYMENT") || true
-        GIT_SSH_COMMAND="ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
-          git clone -b "main" git@github.com:${PATH_AUTOMATION_DEPLOYMENT}.git /tmp/$(basename "$PATH_AUTOMATION_DEPLOYMENT")
-        git config --global --add safe.directory '*'
-        chmod 777 /tmp/$(basename "$PATH_AUTOMATION_DEPLOYMENT")/ -R
+    - name: Clone automation scripts
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ inputs.path_automation_deployment }}
+        ref: main
+        path: /tmp/${{ inputs.path_automation_deployment && 'dp-code-ci-cd' || 'dp-code-ci-cd' }}
+        token: ${{ github.token }}
 
     - name: Configure git
       shell: bash
@@ -45,6 +34,7 @@ runs:
         REPO_BRANCH_NAME: ${{ inputs.repo_branch_name }}
         GIT_TAG: ${{ inputs.git_tag }}
       run: |
+        git config --global --add safe.directory '*'
         git config --global user.email "$GIT_USER_EMAIL"
         git config --global user.name "$GIT_USER_NAME"
         if [ -n "$GIT_TAG" ]; then
