@@ -43,12 +43,6 @@ jobs:
       ENVIRONMENT_: dev
     steps:
       - uses: actions/checkout@v4
-      - name: Debug token
-        env:
-          TOKEN: ${{ secrets.ORG_TOKEN }}
-        shell: bash
-        run: |
-          if [ -z "$TOKEN" ]; then echo "ORG_TOKEN is EMPTY"; else echo "ORG_TOKEN is SET (len=${#TOKEN})"; fi
       - uses: gi-brrd-test/dp-code-ci-cd/.github/actions/setup-deploy@main
         with:
           path_automation_deployment: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
@@ -56,17 +50,7 @@ jobs:
           git_user_name: ${{ secrets.GIT_USER_NAME }}
           token: ${{ secrets.ORG_TOKEN }}
           repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
-      - name: Debug vars
-        shell: bash
-        run: |
-          echo "NODE_URL=[${{ vars.NODE_URL }}]"
-          echo "DATAPOWER_USER=[${{ vars.DATAPOWER_USER }}]"
       - name: Deploy
-        env:
-          DATAPOWER_USER: ${{ vars.DATAPOWER_USER }}
-          DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
-          DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
-          NODE_URL: ${{ vars.NODE_URL }}
         run: |
           echo "$ENVIRONMENT_"
           if [ -f "$VERSION_FILE" ]; then
@@ -111,11 +95,6 @@ jobs:
           token: ${{ secrets.ORG_TOKEN }}
           repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
       - name: Deploy
-        env:
-          DATAPOWER_USER: ${{ vars.DATAPOWER_USER }}
-          DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
-          DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
-          NODE_URL: ${{ vars.NODE_URL }}
         run: |
           echo "$ENVIRONMENT_"
           if [ -f "$VERSION_FILE" ]; then
@@ -157,11 +136,6 @@ jobs:
           token: ${{ secrets.ORG_TOKEN }}
           repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
       - name: Deploy
-        env:
-          DATAPOWER_USER: ${{ vars.DATAPOWER_USER }}
-          DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
-          DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
-          NODE_URL: ${{ vars.NODE_URL }}
         run: |
           echo "$ENVIRONMENT_"
           if [ -f "$VERSION_FILE" ]; then
@@ -203,11 +177,6 @@ jobs:
           token: ${{ secrets.ORG_TOKEN }}
           repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
       - name: Deploy
-        env:
-          DATAPOWER_USER: ${{ vars.DATAPOWER_USER }}
-          DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
-          DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
-          NODE_URL: ${{ vars.NODE_URL }}
         run: |
           echo "$ENVIRONMENT_"
           if [ -f "$VERSION_FILE" ]; then
@@ -246,11 +215,6 @@ jobs:
           token: ${{ secrets.ORG_TOKEN }}
           git_tag: ${{ inputs.rollback_tag }}
       - name: Rollback
-        env:
-          DATAPOWER_USER: ${{ vars.DATAPOWER_USER }}
-          DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
-          DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
-          NODE_URL: ${{ vars.NODE_URL }}
         run: |
           echo "Rollback to tag ${{ inputs.rollback_tag }}"
           if [ -f "$VERSION_FILE" ]; then
