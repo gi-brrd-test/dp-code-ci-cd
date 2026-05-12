@@ -56,6 +56,11 @@ jobs:
           git_user_name: ${{ secrets.GIT_USER_NAME }}
           token: ${{ secrets.ORG_TOKEN }}
           repo_branch_name: ${{ vars.REPO_BRANCH_NAME }}
+      - name: Debug vars
+        shell: bash
+        run: |
+          echo "NODE_URL=[${{ vars.NODE_URL }}]"
+          echo "DATAPOWER_USER=[${{ vars.DATAPOWER_USER }}]"
       - name: Deploy
         env:
           DATAPOWER_USER: ${{ vars.DATAPOWER_USER }}
