@@ -40,7 +40,6 @@ jobs:
           DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
           NODE_URL: ${{ vars.NODE_URL }}
           DOMAIN: ${{ vars.DOMAIN }}
-          PATH_AUTOMATION_DEPLOYMENT: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
         run: |
           if [ -f "$VERSION_FILE" ]; then cat $VERSION_FILE; else echo "version.json not found!"; exit 1; fi
           SCRIPT_PATH="/tmp/$(basename "$PATH_AUTOMATION_DEPLOYMENT")/scripts/deploy_files_utils.sh"
@@ -77,7 +76,6 @@ jobs:
           DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
           NODE_URL: ${{ vars.NODE_URL }}
           DOMAIN: ${{ vars.DOMAIN }}
-          PATH_AUTOMATION_DEPLOYMENT: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
         run: |
           if [ -f "$VERSION_FILE" ]; then cat $VERSION_FILE; else echo "version.json not found!"; exit 1; fi
           SCRIPT_PATH="/tmp/$(basename "$PATH_AUTOMATION_DEPLOYMENT")/scripts/deploy_files_utils.sh"
@@ -113,7 +111,6 @@ jobs:
           DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
           NODE_URL: ${{ vars.NODE_URL }}
           DOMAIN: ${{ vars.DOMAIN }}
-          PATH_AUTOMATION_DEPLOYMENT: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
         run: |
           if [ -f "$VERSION_FILE" ]; then cat $VERSION_FILE; else echo "version.json not found!"; exit 1; fi
           SCRIPT_PATH="/tmp/$(basename "$PATH_AUTOMATION_DEPLOYMENT")/scripts/deploy_files_utils.sh"
@@ -148,7 +145,6 @@ jobs:
           DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
           NODE_URL: ${{ vars.NODE_URL }}
           DOMAIN: ${{ vars.DOMAIN }}
-          PATH_AUTOMATION_DEPLOYMENT: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
         run: |
           if [ -f "$VERSION_FILE" ]; then cat $VERSION_FILE; else echo "version.json not found!"; exit 1; fi
           SCRIPT_PATH="/tmp/$(basename "$PATH_AUTOMATION_DEPLOYMENT")/scripts/deploy_files_utils.sh"

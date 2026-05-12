@@ -50,7 +50,6 @@ jobs:
           DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
           DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
           NODE_URL: ${{ vars.NODE_URL }}
-          PATH_AUTOMATION_DEPLOYMENT: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
         run: |
           echo "Deploying... $ENVIRONMENT_"
           if [ -f "$VERSION_FILE" ]; then
@@ -98,7 +97,6 @@ jobs:
           DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
           DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
           NODE_URL: ${{ vars.NODE_URL }}
-          PATH_AUTOMATION_DEPLOYMENT: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
         run: |
           echo "$ENVIRONMENT_"
           if [ -f "$VERSION_FILE" ]; then
@@ -146,7 +144,6 @@ jobs:
           DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
           DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
           NODE_URL: ${{ vars.NODE_URL }}
-          PATH_AUTOMATION_DEPLOYMENT: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
         run: |
           echo "$ENVIRONMENT_"
           if [ -f "$VERSION_FILE" ]; then
@@ -194,7 +191,6 @@ jobs:
           DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
           DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
           NODE_URL: ${{ vars.NODE_URL }}
-          PATH_AUTOMATION_DEPLOYMENT: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
         run: |
           echo "$ENVIRONMENT_"
           if [ -f "$VERSION_FILE" ]; then
@@ -240,7 +236,6 @@ jobs:
           DATAPOWER_PASS: ${{ secrets.DATAPOWER_PASS }}
           DATAPOWER_URL: ${{ secrets.DATAPOWER_URL }}
           NODE_URL: ${{ vars.NODE_URL }}
-          PATH_AUTOMATION_DEPLOYMENT: ${{ vars.PATH_AUTOMATION_DEPLOYMENT }}
         run: |
           echo "Rollback to tag ${{ inputs.rollback_tag }}"
           if [ -f "$VERSION_FILE" ]; then
