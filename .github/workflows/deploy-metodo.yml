@@ -61,6 +61,9 @@ jobs:
             echo "version.json not found!"
             exit 1
           fi
+          GRUPO_FUNCIONAL=$(echo "${GITHUB_REPOSITORY##*/}" | cut -d'-' -f2)
+          export GRUPO_FUNCIONAL
+          echo "GRUPO_FUNCIONAL=$GRUPO_FUNCIONAL"
           echo "BANDERA_DEPLOY is set to $BANDERA_DEPLOY"
           if [ "$BANDERA_DEPLOY" = true ]; then
             json=$(bash /tmp/$(basename "$PATH_AUTOMATION_DEPLOYMENT")/scripts/deploy_method.sh)
