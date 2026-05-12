@@ -70,6 +70,8 @@ jobs:
             PATH_NODE="$PATH_FILES"
           fi
           echo "$json"
+          echo "DEBUG: _user=[${DATAPOWER_USER}] _ip_dp=[${DATAPOWER_URL}] NODE_URL=[${NODE_URL}]"
+          echo "DEBUG: _pass set=$([ -n "$DATAPOWER_PASS" ] && echo YES || echo NO)"
           response=$(curl --insecure -X POST -d "$json" \
             -H "Content-Type:application/json" \
             -H "_user:${DATAPOWER_USER}" \
