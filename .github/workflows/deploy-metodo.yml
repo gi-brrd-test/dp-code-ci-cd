@@ -61,7 +61,7 @@ jobs:
             echo "version.json not found!"
             exit 1
           fi
-          GRUPO_FUNCIONAL=$(echo "${GITHUB_REPOSITORY##*/}" | cut -d'-' -f2 | awk '{print toupper(substr($0,1,1)) substr($0,2)}')
+          GRUPO_FUNCIONAL=$(jq -r '.grupo // empty' "$VERSION_FILE")
           export GRUPO_FUNCIONAL
           echo "GRUPO_FUNCIONAL=$GRUPO_FUNCIONAL"
           echo "BANDERA_DEPLOY is set to $BANDERA_DEPLOY"
