@@ -10,6 +10,8 @@ on:
 jobs:
   version:
     runs-on: [self-hosted, dp-dev]
+    permissions:
+      contents: write
     outputs:
       tag: ${{ steps.semver.outputs.new_tag }}
     steps:
