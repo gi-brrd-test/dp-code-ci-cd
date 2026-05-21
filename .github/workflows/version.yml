@@ -1,9 +1,11 @@
 name: Version
 
 on:
-  push:
-    branches:
-      - main
+  workflow_call:
+    outputs:
+      tag:
+        description: 'Tag generado'
+        value: ${{ jobs.version.outputs.tag }}
 
 jobs:
   version:
@@ -21,12 +23,6 @@ jobs:
         uses: mathieudutour/github-tag-action@v6.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # Convenciones de branch → tipo de bump:
-          # hotfix/** → patch  (v1.0.0 → v1.0.1)
-          # fix/**    → patch
-          # feat/**   → minor  (v1.0.0 → v1.1.0)
-          # major/**  → major  (v1.0.0 → v2.0.0)
-          # Si el MR viene de hotfix/ → patch automático
           default_bump: patch
           tag_prefix: v
 
